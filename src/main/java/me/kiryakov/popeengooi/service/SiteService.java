@@ -24,13 +24,14 @@ public class SiteService {
     private RestTemplate restTemplate;
 
     public CheckSiteDTO checkSite(Site site) {
-        log.info("Checking site" + site.getUrl());
+        log.info("Checking site " + site.getUrl());
         ResponseEntity<String> result = restTemplate.exchange(site.getUrl(), HttpMethod.GET, null, String.class);
         if (result.getStatusCode().is2xxSuccessful()) {
-            log.info("successful check" + site.getUrl() + " - " + result.getStatusCode());
+            log.info("successful check " + site.getUrl() + " - " + result.getStatusCode());
             CheckSiteDTO checkDTO = new CheckSiteDTO(site.getId(), LocalDateTime.now(), 0L, "OK");
             return checkDTO;
         } else {
+            log.error("failed check " + site.getUrl() + " - " + result.getStatusCode());
             CheckSiteDTO checkDTO = new CheckSiteDTO(site.getId(), LocalDateTime.now(), 0L, "ERROR");
             return checkDTO;
         }
